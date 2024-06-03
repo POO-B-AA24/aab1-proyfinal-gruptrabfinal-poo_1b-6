@@ -1,6 +1,8 @@
 package CONTROLLER;
+
 import java.io.Serializable;
-public class Cliente {
+
+public class Cliente implements Serializable{
 
     public String nombreCliente;
     public String nombrePelicula;
@@ -28,5 +30,5 @@ public class Cliente {
         return "Cliente{" + "nombreCliente=" + nombreCliente + ", nombrePelicula=" + nombrePelicula
                 + ", nombreHora=" + nombreHora + ", nBoletos=" + nBoletos + ", totalPelis=" + totalPelis
                 + ", orden=" + orden + ", totalCombos=" + totalCombos + "}\n";
-    } 
+    }
 }

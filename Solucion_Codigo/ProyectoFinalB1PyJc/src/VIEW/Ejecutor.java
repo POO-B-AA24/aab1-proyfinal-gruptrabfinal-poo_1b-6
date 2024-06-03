@@ -2,10 +2,6 @@ package VIEW;
 
 import CONTROLLER.*;
 import MODEL.*;
-import MODEL.Serializacion;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -15,12 +11,11 @@ public class Ejecutor {
     public static void main(String[] args) {
 
         Scanner put = new Scanner(System.in);
-        
+
         String nombrePelicula = "", sala, nombreHora = "", orden, nombreDia = "", nombreCliente, mensaje = "";
         int comprar, nBoletos = 0, pelicula, hora, fil, col, combo, limFil = 5, limCol = 5, maxClientes = 400, anadirCliente, dia = 0, contador = 0;
         boolean asientoLibre = true, otroCliente = true;
         double precioXboleto, precioxCombo, totalCombo, totalPelis;
-        
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         String asientosA16[][] = new String[limFil][limCol]; //SE INICIALIZAN LAS MATRICES DE LAS SALAS
         String asientosA18[][] = new String[limFil][limCol];
@@ -44,14 +39,13 @@ public class Ejecutor {
 
         String[][] matPelis = new String[4][4];
         String[][] matCombos = new String[3][4];
-        String nombresRandom[] = {"Pedro", "Carlos", "Juan", "Emilia", "Daniel", "Sebastian", "Manuel", "Maria", "Paula", "Jean"};
+        
 
         LeerDatos leerdatos = new LeerDatos();
         leerdatos.importarDatosPeliculas(matPelis);
         leerdatos.importarDatosSnacks(matCombos);
-
-        String datosRegistroCombos[][] = new String[maxClientes][3];
-        String datosRegistroPelicula[][] = new String[maxClientes][4];
+        String datosRegistroCombos[][] = new String[maxClientes][4];
+        String datosRegistroPelicula[][] = new String[maxClientes][5];
 
         while (true) {
             System.out.println("Dia:" + "\n[1]LUNES" + "\n[2]MARTES  (boletos a mitad de precio)" + "\n[3]MIERCOLES" + "\n[4]JUEVES  (boletos a mitad de precio)"
@@ -116,6 +110,8 @@ public class Ejecutor {
             put.nextLine();
             System.out.println("Ingrese su nombre");    //se guarda el nombre del cliente
             nombreCliente = put.nextLine();
+            datosRegistroPelicula[contador][4]=nombreCliente;
+            datosRegistroCombos[contador][3]=nombreCliente;
             System.out.println("****************************");
             System.out.println("DESEA COMPRAR BOLETOS?");
             System.out.println("[1] Si");
@@ -215,10 +211,9 @@ public class Ejecutor {
             System.out.println("[2] No");
             comprar = put.nextInt();
             System.out.println("****************************");
-            VentasCombos ventasCombos = new VentasCombos( precioxCombo, totalCombo);
             if (comprar == 1) {
                 totalCombo = 0;
-                //VentasCombos ventasCombos = new VentasCombos( precioxCombo, totalCombo);
+                VentasCombos ventasCombos = new VentasCombos(ventasboletos, precioxCombo, totalCombo);
                 do {
                     System.out.println("******************************************");
                     System.out.println("ESCOJA SU OPCION DE COMBO");
@@ -265,54 +260,280 @@ public class Ejecutor {
                 otroCliente = false;
             }
         } while (otroCliente); // SI SE ESCRIBE 2 O SE REGISTRAN MAS DE 400 CLIENTES, SE CIERRA EL CICLO
-        String nombres[] = new String[contador];
-        for (int i = 0; i < contador; i++) {//SE LLENA EL ARREGLO DE NOMBRES 
-            int aleat = (int) (Math.random() * 10 + 0);
-            nombres[i] = nombresRandom[aleat];
-        }
+
         System.out.println("-----------CLIENTES HOY: " + contador + "-----------");
-        exportarRegistroPeliculas(datosRegistroPelicula, contador, nombreDia, nombres);
-        exportarRegistroSnacks(contador, orden, nombreDia, datosRegistroCombos, nombres);
-        System.out.println(listaClientes);
-        //////////////////////Serializacion
+
         
-        String nombreArchivo = "Proyecto.ser";//nombre por el cual yo voy a guardar el objeto
-        //serializarObjeto2(nombreArchivo, listaClientes);//aqui convierto el archivo en un .dat
-        //Combos combo = deserializarObjeto(nombreArchivo, Combos.class);
-        Serializacion serializar = new Serializacion();
-        serializar.serializarCliente(listaClientes, nombreArchivo);
-        //serializar.deserializarCliente(nombreArchivo);
+        EscribirClientes serialOUT = new EscribirClientes();
+        serialOUT.escribirClientes(listaClientes);
+        LeerClientes serialIN = new LeerClientes();
+        System.out.println(serialIN.leerClientes(listaClientes));
+        RegistrarVentas registrarVentas = new RegistrarVentas();
+        registrarVentas.exportarRegistroPeliculas(datosRegistroPelicula, contador, nombreDia);
+        registrarVentas.exportarRegistroSnacks(contador, orden, nombreDia, datosRegistroCombos);
     }
     
-    public static <E> void serializarObjeto2(String nombreArchivo, E objeto) {
-        try (FileOutputStream fileOut = new FileOutputStream(nombreArchivo); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            out.writeObject(objeto);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }public static void exportarRegistroSnacks(int clienteNuevo, String orden, String nombreDia, String datosRegistroCombos[][], String nombres[]) {
-        try {
-            Formatter escritura = new Formatter("registroSnacks.csv");
-            escritura.format("%s;%s;%s;%s; \n", "NOMBRE", "PEDIDO", "TOTAL", "DIA");
-            for (int i = 0; i < clienteNuevo; i++) {
-                int aleat = (int) (Math.random() * 10 + 0);
-                escritura.format("%s;%s;%s;%s; \n", nombres[i], datosRegistroCombos[i][0], ("$" + datosRegistroCombos[i][1]), nombreDia);
-            }
-            escritura.close();
-        } catch (Exception e) {
-        }
-    }
-
-    public static void exportarRegistroPeliculas(String datosRegistroPelicula[][], int clienteNuevo, String nombreDia, String nombres[]) {
-        try {
-            Formatter escritura = new Formatter("registroPelis.csv");
-            escritura.format("%s;%s;%s;%s;%s;%s; \n", "NOMBRE", "HORA", "PELICULA", "NUM BOL", "TOTAL", "DIA");
-            for (int i = 0; i < clienteNuevo; i++) {
-                escritura.format("%s;%s;%s;%s;%s;%s\n", nombres[i], datosRegistroPelicula[i][0], datosRegistroPelicula[i][1], datosRegistroPelicula[i][2], ("$" + datosRegistroPelicula[i][3]), nombreDia);
-            }
-            escritura.close();
-        } catch (Exception e) {
-        }
-    }
+   
 
 }
+
+/*
+run:
+Dia:
+[1]LUNES
+[2]MARTES  (boletos a mitad de precio)
+[3]MIERCOLES
+[4]JUEVES  (boletos a mitad de precio)
+[5]VIERNES
+[6]SABADO
+[7]DOMINGO  (snacks a mitad de precio)
+3
+Ingrese su nombre
+Juan
+****************************
+DESEA COMPRAR BOLETOS?
+[1] Si
+[2] No
+1
+****************************
+CUANTOS BOLETOS QUIERE?
+2
+****************************
+ELIJA SU PELICULA
+1 SPIDERMAN[$8] (estreno)
+2 LEGO[$4]
+3 BARBIE[$4]
+4 MATRIX[$2] (ultima semana)
+2
+****************************
+ELIJA LA HORA
+[1] 16h00 (descuento -25%)
+[2] 18h00
+[3] 20h00 (tarifa adicional +25%)
+[4] 22h00
+3
+****************************
+----------------------
+ELIJA EL ASIENTO 1
+-ELIJA SU FILA  -  [1-5]
+1
+-ELIJA SU COLUMNA  -  [1-5]
+1
+----------------------
+X	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+
+----------------------
+ELIJA EL ASIENTO 2
+-ELIJA SU FILA  -  [1-5]
+1
+-ELIJA SU COLUMNA  -  [1-5]
+2
+----------------------
+X	X	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+
+==================== FACTURA ====================
+Numero de Boletos: 2
+Precio por Boleto: $5.0
+Pelicula: LEGO
+Hora: 20h00
+Total: $10.0
+IVA: 1,2
+Total a Pagar: $11,2
+=================================================
+
+
+
+
+==================== BOLETO 1 ====================
+Pelicula: LEGO
+Hora: 20h00
+Sala: B
+Asiento: 1-1
+==================================================
+
+
+==================== BOLETO 2 ====================
+Pelicula: LEGO
+Hora: 20h00
+Sala: B
+Asiento: 1-2
+==================================================
+
+
+
+****************************
+DESEA COMPRAR SNACKS?
+[1] Si
+[2] No
+1
+****************************
+******************************************
+ESCOJA SU OPCION DE COMBO
+[1]COMBO Bebida_con_Canguil [$3]
+[2]COMBO Bebida_con_Canguil_y_un_Raspado [$7]
+[3]COMBO Nachos_con_burrito_y_un_Raspado [$9]
+******************************************
+2
+ 
+******************************************
+DESEA COMPRAR OTRO COMBO?
+[1] Si
+[2] No
+1
+******************************************
+ESCOJA SU OPCION DE COMBO
+[1]COMBO Bebida_con_Canguil [$3]
+[2]COMBO Bebida_con_Canguil_y_un_Raspado [$7]
+[3]COMBO Nachos_con_burrito_y_un_Raspado [$9]
+******************************************
+1
+ *********************************************************
+LAS FUNCIONES SPIDERMAN Y LEGO TIENE UN DESCUENTO PARA EL [1]COMBO
+*********************************************************
+
+******************************************
+DESEA COMPRAR OTRO COMBO?
+[1] Si
+[2] No
+2
+==================== FACTURA ====================
+Orden:[2]COMBO [1]COMBO 
+IVA: 0,96
+TOTAL: $8
+TOTAL A PAGAR: $8,96
+=================================================
+
+
+
+
+
+DESEA INGRESAR OTRO CLIENTE?
+[1] Si
+[2] No
+1
+Ingrese su nombre
+Jose
+****************************
+DESEA COMPRAR BOLETOS?
+[1] Si
+[2] No
+1
+****************************
+CUANTOS BOLETOS QUIERE?
+1
+****************************
+ELIJA SU PELICULA
+1 SPIDERMAN[$8] (estreno)
+2 LEGO[$4]
+3 BARBIE[$4]
+4 MATRIX[$2] (ultima semana)
+2
+****************************
+ELIJA LA HORA
+[1] 16h00 (descuento -25%)
+[2] 18h00
+[3] 20h00 (tarifa adicional +25%)
+[4] 22h00
+3
+****************************
+----------------------
+ELIJA EL ASIENTO 1
+-ELIJA SU FILA  -  [1-5]
+1
+-ELIJA SU COLUMNA  -  [1-5]
+1
+----------------------
+X	X	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+
+
+!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
+ESE ASIENTO YA ESTA OCUPADO, PRUEBA CON OTRO
+!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
+
+----------------------
+ELIJA EL ASIENTO 1
+-ELIJA SU FILA  -  [1-5]
+3
+-ELIJA SU COLUMNA  -  [1-5]
+3
+----------------------
+X	X	-	-	-	
+-	-	-	-	-	
+-	-	X	-	-	
+-	-	-	-	-	
+-	-	-	-	-	
+
+==================== FACTURA ====================
+Numero de Boletos: 1
+Precio por Boleto: $5.0
+Pelicula: LEGO
+Hora: 20h00
+Total: $5.0
+IVA: 0,6
+Total a Pagar: $5,6
+=================================================
+
+
+
+
+==================== BOLETO 1 ====================
+Pelicula: LEGO
+Hora: 20h00
+Sala: B
+Asiento: 3-3
+==================================================
+
+
+
+****************************
+DESEA COMPRAR SNACKS?
+[1] Si
+[2] No
+1
+****************************
+******************************************
+ESCOJA SU OPCION DE COMBO
+[1]COMBO Bebida_con_Canguil [$3]
+[2]COMBO Bebida_con_Canguil_y_un_Raspado [$7]
+[3]COMBO Nachos_con_burrito_y_un_Raspado [$9]
+******************************************
+3
+ 
+******************************************
+DESEA COMPRAR OTRO COMBO?
+[1] Si
+[2] No
+2
+==================== FACTURA ====================
+Orden:[3]COMBO 
+IVA: 1,08
+TOTAL: $9
+TOTAL A PAGAR: $10,08
+=================================================
+
+
+
+
+
+DESEA INGRESAR OTRO CLIENTE?
+[1] Si
+[2] No
+2
+-----------CLIENTES HOY: 2-----------
+[Cliente{nombreCliente=Juan, nombrePelicula=LEGO, nombreHora=20h00, nBoletos=2, totalPelis=11.2, orden=[2]COMBO [1]COMBO , totalCombos=8.96}
+, Cliente{nombreCliente=Jose, nombrePelicula=LEGO, nombreHora=20h00, nBoletos=1, totalPelis=5.6, orden=[3]COMBO , totalCombos=10.08}
+]
+BUILD SUCCESSFUL (total time: 1 minute 1 second)
+*/

@@ -7,7 +7,7 @@ public class VentasCombos {
     public double precioxCombo;
     public double totalCombo;
 
-    public VentasCombos(VentasBoletos ventas, double precioxCombo, double totalCombo) {
+    public VentasCombos( double precioxCombo, double totalCombo) {
         this.precioxCombo = precioxCombo;
         this.totalCombo = totalCombo;
     }
@@ -93,7 +93,6 @@ public class VentasCombos {
     public double calcularTotalCombos(double totalCombo){
         double iva = (totalCombo * 0.12);
         double total = (totalCombo + iva);
-        
         return total;
     }
 

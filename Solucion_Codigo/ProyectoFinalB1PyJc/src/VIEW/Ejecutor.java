@@ -2,6 +2,10 @@ package VIEW;
 
 import CONTROLLER.*;
 import MODEL.*;
+import MODEL.Serializacion;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -11,11 +15,12 @@ public class Ejecutor {
     public static void main(String[] args) {
 
         Scanner put = new Scanner(System.in);
-
+        
         String nombrePelicula = "", sala, nombreHora = "", orden, nombreDia = "", nombreCliente, mensaje = "";
         int comprar, nBoletos = 0, pelicula, hora, fil, col, combo, limFil = 5, limCol = 5, maxClientes = 400, anadirCliente, dia = 0, contador = 0;
         boolean asientoLibre = true, otroCliente = true;
         double precioXboleto, precioxCombo, totalCombo, totalPelis;
+        
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         String asientosA16[][] = new String[limFil][limCol]; //SE INICIALIZAN LAS MATRICES DE LAS SALAS
         String asientosA18[][] = new String[limFil][limCol];
@@ -210,9 +215,10 @@ public class Ejecutor {
             System.out.println("[2] No");
             comprar = put.nextInt();
             System.out.println("****************************");
+            VentasCombos ventasCombos = new VentasCombos( precioxCombo, totalCombo);
             if (comprar == 1) {
                 totalCombo = 0;
-                VentasCombos ventasCombos = new VentasCombos(ventasboletos, precioxCombo, totalCombo);
+                //VentasCombos ventasCombos = new VentasCombos( precioxCombo, totalCombo);
                 do {
                     System.out.println("******************************************");
                     System.out.println("ESCOJA SU OPCION DE COMBO");
@@ -268,9 +274,23 @@ public class Ejecutor {
         exportarRegistroPeliculas(datosRegistroPelicula, contador, nombreDia, nombres);
         exportarRegistroSnacks(contador, orden, nombreDia, datosRegistroCombos, nombres);
         System.out.println(listaClientes);
+        //////////////////////Serializacion
+        
+        String nombreArchivo = "Proyecto.ser";//nombre por el cual yo voy a guardar el objeto
+        //serializarObjeto2(nombreArchivo, listaClientes);//aqui convierto el archivo en un .dat
+        //Combos combo = deserializarObjeto(nombreArchivo, Combos.class);
+        Serializacion serializar = new Serializacion();
+        serializar.serializarCliente(listaClientes, nombreArchivo);
+        //serializar.deserializarCliente(nombreArchivo);
     }
     
-    public static void exportarRegistroSnacks(int clienteNuevo, String orden, String nombreDia, String datosRegistroCombos[][], String nombres[]) {
+    public static <E> void serializarObjeto2(String nombreArchivo, E objeto) {
+        try (FileOutputStream fileOut = new FileOutputStream(nombreArchivo); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(objeto);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }public static void exportarRegistroSnacks(int clienteNuevo, String orden, String nombreDia, String datosRegistroCombos[][], String nombres[]) {
         try {
             Formatter escritura = new Formatter("registroSnacks.csv");
             escritura.format("%s;%s;%s;%s; \n", "NOMBRE", "PEDIDO", "TOTAL", "DIA");

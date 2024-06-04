@@ -3,7 +3,6 @@ package VIEW;
 import CONTROLLER.*;
 import MODEL.*;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.Scanner;
 
 public class Ejecutor {

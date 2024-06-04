@@ -1,7 +1,6 @@
 package CONTROLLER;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class VentasCombos {
     public double precioxCombo;

@@ -2,9 +2,12 @@ package CONTROLLER;
 
 import java.text.DecimalFormat;
 
-public class VentasCombos {
+public class VentasCombos extends Ventas{
     public double precioxCombo;
     public double totalCombo;
+    public String orden;
+    public int contador;
+    public String[][] datosRegistroCombos;
 
     public VentasCombos(VentasBoletos ventas, double precioxCombo, double totalCombo) {
         this.precioxCombo = precioxCombo;
@@ -71,13 +74,32 @@ public class VentasCombos {
         return datosCombo;
     }
     
-    public String facturaSnack(double totalCombo, String orden, String datosRegistroCombos[][], int contador) {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @Override
+    public String construirFacctura() {
         String facturaSn = "";
         DecimalFormat df = new DecimalFormat("#.##"); //es una clase que permite reducir valores decimales
-        double iva = (totalCombo * 0.12), total = (totalCombo + iva);
+        
+        double iva = (totalCombo *0.12);
+        double total = calcularTotal();
+        
+        
         String totalDecim = df.format(totalCombo);
         String ivaDecim = df.format(iva);
         String totalPagarSnacksDecim = df.format(total);  //se guardan los datos en variables con los decimales reducidos
+        
+        
         facturaSn += "==================== FACTURA ====================" + "\n"
                 + "Orden:" + orden + "\n"
                 + "IVA: " + ivaDecim + "\n"
@@ -89,11 +111,14 @@ public class VentasCombos {
         return facturaSn;
     }
     
-    public double calcularTotalCombos(double totalCombo){
-        double iva = (totalCombo * 0.12);
-        double total = (totalCombo + iva);
+    @Override
+    public double calcularTotal(){
+        double iva = (this.totalCombo * 0.12);
+        double total = (this.totalCombo + iva);
         
         return total;
     }
+
+   
 
 }

@@ -15,6 +15,7 @@ public class Ejecutor {
         int comprar, nBoletos = 0, pelicula, hora, fil, col, combo, limFil = 5, limCol = 5, maxClientes = 400, anadirCliente, dia = 0, contador = 0;
         boolean asientoLibre = true, otroCliente = true;
         double precioXboleto, precioxCombo, totalCombo, totalPelis;
+        
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         String asientosA16[][] = new String[limFil][limCol]; //SE INICIALIZAN LAS MATRICES DE LAS SALAS
         String asientosA18[][] = new String[limFil][limCol];
@@ -158,6 +159,7 @@ public class Ejecutor {
                 String datosHora[] = ventasboletos.asignarDatosHora(matPelis, hora, precioXboleto); //se guardan los valores en un array segun la hora escogida
                 nombreHora = datosHora[0];
                 precioXboleto = Double.parseDouble(datosHora[1]);
+                
                 System.out.println("****************************");
                 for (int i = 0; i < nBoletos; i++) {
                     asientoLibre = true;
@@ -242,8 +244,14 @@ public class Ejecutor {
                     System.out.println("[2] No");
                     comprar = put.nextInt();
                 } while (comprar == 1);
-                System.out.println(ventasCombos.facturaSnack(totalCombo, orden, datosRegistroCombos, contador));
-                totalCombo = ventasCombos.calcularTotalCombos(totalCombo);
+                ventasCombos.datosRegistroCombos = datosRegistroCombos;
+                ventasCombos.totalCombo=totalCombo;
+                ventasCombos.orden = orden;
+                ventasCombos.contador = contador;
+                
+
+                System.out.println(ventasCombos.construirFacctura());
+                totalCombo = ventasCombos.calcularTotal();
             }
             listaClientes.add(new Cliente(nombreCliente, nombrePelicula, nombreHora, nBoletos, totalPelis, orden, totalCombo, nombreDia));
             contador++;

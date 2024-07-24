@@ -2,11 +2,13 @@ package CONTROLLER;
 
 import java.text.DecimalFormat;
 
-public class VentasBoletos {
+    public class VentasBoletos extends Ventas{
 
     public int dia;
     public int limFil;
     public int limCol;
+    public double precioXboleto;
+    public int nBoletos;
 
     public VentasBoletos(int dia, int limFil, int limCol) {
         this.dia = dia;
@@ -249,14 +251,19 @@ public class VentasBoletos {
         }
         return datosPelicula;
     }
-
+    
+    
+    
+    
+    
+    
     public double calcularTotalBoletos(double precioXboleto, int nBoletos) {
 
         double iva = ((nBoletos * precioXboleto) * 0.12);
         double totalPagarPelicula = ((nBoletos * precioXboleto) + iva);
         return totalPagarPelicula;
-    }
-
+    } 
+    
     public String facturaPelicula(String facturaAsientos[], int nBoletos, double precioXboleto, String nombrePelicula,
             String nombreHora, String sala, String nombreDia, int contador, String datosRegistroPelicula[][]) {
         String boletos = "";
@@ -286,6 +293,16 @@ public class VentasBoletos {
         datosRegistroPelicula[contador][2] = (String.valueOf(nBoletos) + " boletos");
         datosRegistroPelicula[contador][3] = totalPagarPeliculaDecim;
         return boletos;
+    }
+
+    @Override
+    public String construirFacctura() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double calcularTotal() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

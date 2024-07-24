@@ -74,18 +74,7 @@ public class VentasCombos extends Ventas{
         return datosCombo;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     @Override
     public String construirFacctura() {
         String facturaSn = "";

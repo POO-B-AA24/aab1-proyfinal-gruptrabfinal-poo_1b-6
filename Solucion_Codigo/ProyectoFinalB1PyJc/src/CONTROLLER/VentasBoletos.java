@@ -9,7 +9,14 @@ import java.text.DecimalFormat;
     public int limCol;
     public double precioXboleto;
     public int nBoletos;
-
+    public int pelicula;
+    public String facturaAsientos[];
+    public String nombrePelicula;
+    public String nombreHora;
+    public String sala; 
+    public String nombreDia; 
+    public int contador; 
+    public String datosRegistroPelicula[][];
     public VentasBoletos(int dia, int limFil, int limCol) {
         this.dia = dia;
         this.limFil = limFil;
@@ -253,20 +260,23 @@ import java.text.DecimalFormat;
     }
     
     
-    
-    
-    
-    
-    public double calcularTotalBoletos(double precioXboleto, int nBoletos) {
+    /*public double calcularTotalBoletos(double precioXboleto, int nBoletos) {
 
         double iva = ((nBoletos * precioXboleto) * 0.12);
         double totalPagarPelicula = ((nBoletos * precioXboleto) + iva);
         return totalPagarPelicula;
-    } 
+    } */
+    @Override
+    public double calcularTotal(){
+        double iva = ((nBoletos* precioXboleto)*0.12);
+        double total = ((nBoletos * precioXboleto)+ iva);
+        return total;
+    }
     
-    public String facturaPelicula(String facturaAsientos[], int nBoletos, double precioXboleto, String nombrePelicula,
-            String nombreHora, String sala, String nombreDia, int contador, String datosRegistroPelicula[][]) {
-        String boletos = "";
+    
+    @Override
+    public String construirFacctura() {
+    String boletos = "";
         DecimalFormat df = new DecimalFormat("#.##"); //es una clase que permite reducir valores decimales
         double iva = ((nBoletos * precioXboleto) * 0.12), totalPagarPelicula = ((nBoletos * precioXboleto) + iva);
         String ivaDecim = df.format(iva);
@@ -294,15 +304,4 @@ import java.text.DecimalFormat;
         datosRegistroPelicula[contador][3] = totalPagarPeliculaDecim;
         return boletos;
     }
-
-    @Override
-    public String construirFacctura() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public double calcularTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }

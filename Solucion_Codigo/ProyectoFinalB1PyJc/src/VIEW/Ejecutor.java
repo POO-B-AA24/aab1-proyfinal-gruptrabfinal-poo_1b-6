@@ -202,9 +202,16 @@ public class Ejecutor {
                         }
                     }
                 }
-                totalPelis = ventasboletos.calcularTotalBoletos(precioXboleto, nBoletos);
-                System.out.println(ventasboletos.facturaPelicula(facturaAsientos, nBoletos, precioXboleto, nombrePelicula, nombreHora, sala,
-                        nombreDia, contador, datosRegistroPelicula));
+                ventasboletos.datosRegistroPelicula = datosRegistroPelicula;
+                ventasboletos.nBoletos = nBoletos;
+                ventasboletos.precioXboleto = precioXboleto;
+                ventasboletos.nombrePelicula = nombrePelicula;
+                ventasboletos.nombreHora = nombreHora;
+                ventasboletos.facturaAsientos= facturaAsientos;
+                ventasboletos.sala= sala;
+                ventasboletos.contador = contador;
+                totalPelis = ventasboletos.calcularTotal();
+                System.out.println(ventasboletos.construirFacctura());
             }
             System.out.println("****************************");
             System.out.println("DESEA COMPRAR SNACKS?");

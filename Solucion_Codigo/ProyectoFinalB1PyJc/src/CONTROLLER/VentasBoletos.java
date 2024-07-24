@@ -259,21 +259,12 @@ import java.text.DecimalFormat;
         return datosPelicula;
     }
     
-    
-    /*public double calcularTotalBoletos(double precioXboleto, int nBoletos) {
-
-        double iva = ((nBoletos * precioXboleto) * 0.12);
-        double totalPagarPelicula = ((nBoletos * precioXboleto) + iva);
-        return totalPagarPelicula;
-    } */
     @Override
     public double calcularTotal(){
         double iva = ((nBoletos* precioXboleto)*0.12);
         double total = ((nBoletos * precioXboleto)+ iva);
         return total;
     }
-    
-    
     @Override
     public String construirFacctura() {
     String boletos = "";

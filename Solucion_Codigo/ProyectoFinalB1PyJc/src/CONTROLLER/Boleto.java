@@ -2,7 +2,7 @@ package CONTROLLER;
 
 import java.text.DecimalFormat;
 
-    public class VentasBoletos extends Ventas{
+    public class Boleto extends Venta{
 
     public int dia;
     public int limFil;
@@ -17,71 +17,60 @@ import java.text.DecimalFormat;
     public String nombreDia; 
     public int contador; 
     public String datosRegistroPelicula[][];
-    public VentasBoletos(int dia, int limFil, int limCol) {
+    public Boleto(int dia, int limFil, int limCol) {
         this.dia = dia;
         this.limFil = limFil;
         this.limCol = limCol;
     }
 
-    public void crearSalas(String asientos[][]) {   //se llenan las salas de el signo "-" para representar que estan vacias
-        for (int i = 0; i < this.limFil; i++) {
-            for (int j = 0; j < this.limCol; j++) {
-                asientos[i][j] = "-";
-            }
-        }
-    }
-
-    public String imprimirSegunPeli_Hora(int pelicula, int hora, String asientosA16[][], String asientosA18[][], String asientosA20[][], String asientosA22[][],
-            String asientosB16[][], String asientosB18[][], String asientosB20[][], String asientosB22[][],
-            String asientosC16[][], String asientosC18[][], String asientosC20[][], String asientosC22[][],
-            String asientosD16[][], String asientosD18[][], String asientosD20[][], String asientosD22[][]) {//se usa para no sobrecargar la clase main, devuelve un dinujo de la sala segun la hora y pelicula
+    public String imprimirSegunPeli_Hora(int pelicula, int hora, Sala[][] listaSalas) {//se usa para no sobrecargar la clase main, devuelve un dinujo de la sala segun la hora y pelicula
         switch (pelicula) {
             case 1:
                 switch (hora) {
                     case 1:
-                        return dibujarAsientos(asientosA16);
+                        return dibujarAsientos(listaSalas[0][0].matrizAsientos);
                     case 2:
-                        return dibujarAsientos(asientosA18);
+                        return dibujarAsientos(listaSalas[0][1].matrizAsientos);
                     case 3:
-                        return dibujarAsientos(asientosA20);
+                        return dibujarAsientos(listaSalas[0][2].matrizAsientos);
                     case 4:
-                        return dibujarAsientos(asientosA22);
+                        return dibujarAsientos(listaSalas[0][3].matrizAsientos);
                 }
                 break;
             case 2:
                 switch (hora) {
                     case 1:
-                        return dibujarAsientos(asientosB16);
+                        return dibujarAsientos(listaSalas[1][0].matrizAsientos);
                     case 2:
-                        return dibujarAsientos(asientosB18);
+                        return dibujarAsientos(listaSalas[1][1].matrizAsientos);
                     case 3:
-                        return dibujarAsientos(asientosB20);
+                        return dibujarAsientos(listaSalas[1][2].matrizAsientos);
                     case 4:
-                        return dibujarAsientos(asientosB22);
+                        return dibujarAsientos(listaSalas[1][3].matrizAsientos);
                 }
                 break;
             case 3:
                 switch (hora) {
                     case 1:
-                        return dibujarAsientos(asientosC16);
+                        return dibujarAsientos(listaSalas[2][0].matrizAsientos);
                     case 2:
-                        return dibujarAsientos(asientosC18);
+                        return dibujarAsientos(listaSalas[2][1].matrizAsientos);
                     case 3:
-                        return dibujarAsientos(asientosC20);
+                        return dibujarAsientos(listaSalas[2][2].matrizAsientos);
                     case 4:
-                        return dibujarAsientos(asientosC22);
+                        return dibujarAsientos(listaSalas[2][3].matrizAsientos);
                 }
                 break;
             case 4:
                 switch (hora) {
                     case 1:
-                        return dibujarAsientos(asientosD16);
+                        return dibujarAsientos(listaSalas[3][0].matrizAsientos);
                     case 2:
-                        return dibujarAsientos(asientosD18);
+                        return dibujarAsientos(listaSalas[3][1].matrizAsientos);
                     case 3:
-                        return dibujarAsientos(asientosD20);
+                        return dibujarAsientos(listaSalas[3][2].matrizAsientos);
                     case 4:
-                        return dibujarAsientos(asientosD22);
+                        return dibujarAsientos(listaSalas[3][3].matrizAsientos);
                 }
                 break;
         }
@@ -89,74 +78,72 @@ import java.text.DecimalFormat;
     }
 
     
-    public boolean validarSegunPeli_Hora(int pelicula, int hora, int fil, int col, String facturaAsientos[],int i,
-            String asientosA16[][], String asientosA18[][], String asientosA20[][], String asientosA22[][],
-            String asientosB16[][], String asientosB18[][], String asientosB20[][], String asientosB22[][],
-            String asientosC16[][], String asientosC18[][], String asientosC20[][], String asientosC22[][],
-            String asientosD16[][], String asientosD18[][], String asientosD20[][], String asientosD22[][]) { //se usa para no sobrecargar la clase main, valida segun la hora y pelicula
+    public boolean validarSegunPeli_Hora(int pelicula, int hora, int fil, int col, String facturaAsientos[],int i,Sala[][] listaSalas) { //se usa para no sobrecargar la clase main, valida segun la hora y pelicula
         boolean asientoLibre=true;
+        
+        
         switch (pelicula) {
             case 1:
                 switch (hora) {
                     case 1:
-                        asientoLibre = validar_Asignar_Asiento(asientosA16, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[0][0].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 2:
-                        asientoLibre = validar_Asignar_Asiento(asientosA18, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[0][1].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 3:
-                        asientoLibre = validar_Asignar_Asiento(asientosA20, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[0][2].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 4:
-                        asientoLibre = validar_Asignar_Asiento(asientosA22, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[0][3].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                 }
                 break;
             case 2:
                 switch (hora) {
                     case 1:
-                        asientoLibre = validar_Asignar_Asiento(asientosB16, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[1][0].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 2:
-                        asientoLibre = validar_Asignar_Asiento(asientosB18, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[1][1].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 3:
-                        asientoLibre = validar_Asignar_Asiento(asientosB20, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[1][2].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 4:
-                        asientoLibre = validar_Asignar_Asiento(asientosB22, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[1][3].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                 }
                 break;
             case 3:
                 switch (hora) {
                     case 1:
-                        asientoLibre = validar_Asignar_Asiento(asientosC16, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[2][0].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 2:
-                        asientoLibre = validar_Asignar_Asiento(asientosC18, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[2][1].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 3:
-                        asientoLibre =validar_Asignar_Asiento(asientosC20, fil, col, facturaAsientos, i);
+                        asientoLibre =validar_Asignar_Asiento(listaSalas[2][2].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 4:
-                        asientoLibre = validar_Asignar_Asiento(asientosC22, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[2][3].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                 }
                 break;
             case 4:
                 switch (hora) {
                     case 1:
-                        asientoLibre = validar_Asignar_Asiento(asientosD16, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[3][0].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 2:
-                        asientoLibre = validar_Asignar_Asiento(asientosD18, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[3][1].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 3:
-                        asientoLibre = validar_Asignar_Asiento(asientosD20, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[3][2].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                     case 4:
-                        asientoLibre = validar_Asignar_Asiento(asientosD22, fil, col, facturaAsientos, i);
+                        asientoLibre = validar_Asignar_Asiento(listaSalas[3][3].matrizAsientos, fil, col, facturaAsientos, i);
                         break;
                 }
                 break;
@@ -259,6 +246,10 @@ import java.text.DecimalFormat;
         return datosPelicula;
     }
     
+<<<<<<< HEAD:Solucion_Codigo/ProyectoFinalB1PyJc/src/CONTROLLER/Boleto.java
+
+=======
+>>>>>>> 400869c998f325abb8d416d41e49c083979b5ca7:Solucion_Codigo/ProyectoFinalB1PyJc/src/CONTROLLER/VentasBoletos.java
     @Override
     public double calcularTotal(){
         double iva = ((nBoletos* precioXboleto)*0.12);

@@ -1,5 +1,5 @@
 package CONTROLLER;
-public abstract class Ventas {
+public abstract class Venta {
 
 public abstract String construirFacctura();
 

@@ -5,8 +5,8 @@ import MODEL.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Ejecutor {
-
+public class Ejecutor1 {
+    
     public static void main(String[] args) {
 
         Scanner put = new Scanner(System.in);
@@ -17,7 +17,7 @@ public class Ejecutor {
         double precioXboleto, precioxCombo, totalCombo, totalPelis;
         
         ArrayList<Cliente> listaClientes = new ArrayList<>();
-        String asientosA16[][] = new String[limFil][limCol]; //SE INICIALIZAN LAS MATRICES DE LAS SALAS
+        String asientosA16[][] = new String[limFil][limCol]; 
         String asientosA18[][] = new String[limFil][limCol];
         String asientosA20[][] = new String[limFil][limCol];
         String asientosA22[][] = new String[limFil][limCol];
@@ -36,6 +36,7 @@ public class Ejecutor {
         String asientosD18[][] = new String[limFil][limCol];
         String asientosD20[][] = new String[limFil][limCol];
         String asientosD22[][] = new String[limFil][limCol];
+        
 
         String[][] matPelis = new String[4][4];
         String[][] matCombos = new String[3][4];
@@ -46,6 +47,28 @@ public class Ejecutor {
         leerdatos.importarDatosSnacks(matCombos);
         String datosRegistroCombos[][] = new String[maxClientes][4];
         String datosRegistroPelicula[][] = new String[maxClientes][5];
+        
+        
+        Sala[][] listaSalas = new Sala[4][4];
+        listaSalas[0][0] = new Sala("A", matPelis[3][0], matPelis[0][0], asientosA16);
+        listaSalas[0][1] = new Sala("A", matPelis[3][1], matPelis[0][0], asientosA18);
+        listaSalas[0][2] = new Sala("A", matPelis[3][2], matPelis[0][0], asientosA20);
+        listaSalas[0][3] = new Sala("A", matPelis[3][3], matPelis[0][0], asientosA22);
+        
+        listaSalas[1][0] = new Sala("B", matPelis[3][0], matPelis[1][0], asientosB16);
+        listaSalas[1][1] = new Sala("B", matPelis[3][1], matPelis[1][0], asientosB18);
+        listaSalas[1][2] = new Sala("B", matPelis[3][2], matPelis[1][0], asientosB20);
+        listaSalas[1][3] = new Sala("B", matPelis[3][3], matPelis[1][0], asientosB22);
+        
+        listaSalas[2][0] = new Sala("C", matPelis[3][0], matPelis[2][0], asientosC16);
+        listaSalas[2][1] = new Sala("C", matPelis[3][1], matPelis[2][0], asientosC18);
+        listaSalas[2][2] = new Sala("C", matPelis[3][2], matPelis[2][0], asientosC20);
+        listaSalas[2][3] = new Sala("C", matPelis[3][3], matPelis[2][0], asientosC22);
+        
+        listaSalas[3][0] = new Sala("D", matPelis[3][0], matPelis[3][0], asientosD16);
+        listaSalas[3][1] = new Sala("D", matPelis[3][1], matPelis[3][0], asientosD18);
+        listaSalas[3][2] = new Sala("D", matPelis[3][2], matPelis[3][0], asientosD20);
+        listaSalas[3][3] = new Sala("D", matPelis[3][3], matPelis[3][0], asientosD22);
 
         while (true) {
             System.out.println("Dia:" + "\n[1]LUNES" + "\n[2]MARTES  (boletos a mitad de precio)" + "\n[3]MIERCOLES" + "\n[4]JUEVES  (boletos a mitad de precio)"
@@ -81,26 +104,17 @@ public class Ejecutor {
                 nombreDia = "DOMINGO";
                 break;
         }
-        VentasBoletos ventasboletos = new VentasBoletos(dia, limFil, limCol);
-        ventasboletos.crearSalas(asientosA16); //SE INVOCAN LOS METODOS PARA LLENAR LAS MATRICES DE LAS SALAS
-        ventasboletos.crearSalas(asientosA18);
-        ventasboletos.crearSalas(asientosA20);
-        ventasboletos.crearSalas(asientosA22);
-
-        ventasboletos.crearSalas(asientosB16);
-        ventasboletos.crearSalas(asientosB18);
-        ventasboletos.crearSalas(asientosB20);
-        ventasboletos.crearSalas(asientosB22);
-
-        ventasboletos.crearSalas(asientosC16);
-        ventasboletos.crearSalas(asientosC18);
-        ventasboletos.crearSalas(asientosC20);
-        ventasboletos.crearSalas(asientosC22);
-
-        ventasboletos.crearSalas(asientosD16);
-        ventasboletos.crearSalas(asientosD18);
-        ventasboletos.crearSalas(asientosD20);
-        ventasboletos.crearSalas(asientosD22);
+        
+        
+        Boleto ventasboletos = new Boleto(dia, limFil, limCol);
+        
+        for (int i = 0; i < listaSalas.length; i++) {
+            for (int j = 0; j < listaSalas[0].length; j++) {
+                listaSalas[i][j].crearSalas(listaSalas[i][j].matrizAsientos);
+            }
+        }
+        
+        
         do {
             orden = "";
             precioXboleto = 0;
@@ -185,16 +199,10 @@ public class Ejecutor {
                             }
                         }
                         System.out.println("----------------------");
-                        asientoLibre = ventasboletos.validarSegunPeli_Hora(pelicula, hora, fil, col, facturaAsientos, i, // se valida la disponibilidad del asiento segun su sala
-                                asientosA16, asientosA18, asientosA20, asientosA22,
-                                asientosB16, asientosB18, asientosB20, asientosB22,
-                                asientosC16, asientosC18, asientosC20, asientosC22,
-                                asientosD16, asientosD18, asientosD20, asientosD22);
-                        System.out.println(ventasboletos.imprimirSegunPeli_Hora(pelicula, hora, //se imprime la matriz de la sala seleccionada
-                                asientosA16, asientosA18, asientosA20, asientosA22,
-                                asientosB16, asientosB18, asientosB20, asientosB22,
-                                asientosC16, asientosC18, asientosC20, asientosC22,
-                                asientosD16, asientosD18, asientosD20, asientosD22));
+                        asientoLibre = ventasboletos.validarSegunPeli_Hora(pelicula, hora, fil, col, facturaAsientos, i, listaSalas);
+                        
+                        System.out.println(ventasboletos.imprimirSegunPeli_Hora(pelicula, hora,listaSalas));
+                        
                         if (asientoLibre) {
                             System.out.println("\n" + "!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!");
                             System.out.println("ESE ASIENTO YA ESTA OCUPADO, PRUEBA CON OTRO");
@@ -221,7 +229,7 @@ public class Ejecutor {
             System.out.println("****************************");
             if (comprar == 1) {
                 totalCombo = 0;
-                VentasCombos ventasCombos = new VentasCombos(ventasboletos, precioxCombo, totalCombo);
+                Combo ventasCombos = new Combo(ventasboletos, precioxCombo, totalCombo);
                 do {
                     System.out.println("******************************************");
                     System.out.println("ESCOJA SU OPCION DE COMBO");

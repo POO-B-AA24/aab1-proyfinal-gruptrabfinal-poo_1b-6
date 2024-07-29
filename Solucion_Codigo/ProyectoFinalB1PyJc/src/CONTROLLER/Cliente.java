@@ -31,4 +31,10 @@ public class Cliente implements Serializable{
                 + ", nombreHora=" + nombreHora + ", nBoletos=" + nBoletos + ", totalPelis=" + totalPelis
                 + ", orden=" + orden + ", totalCombos=" + totalCombos + "}\n";
     }
+
+    public Cliente(String nombreCliente, int nBoletos) {
+        this.nombreCliente = nombreCliente;
+        this.nBoletos = nBoletos;
+    }
+    
 }

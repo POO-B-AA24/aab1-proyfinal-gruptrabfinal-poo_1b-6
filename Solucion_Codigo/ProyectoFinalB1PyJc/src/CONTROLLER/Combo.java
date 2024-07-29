@@ -2,14 +2,14 @@ package CONTROLLER;
 
 import java.text.DecimalFormat;
 
-public class VentasCombos extends Ventas{
+public class Combo extends Venta{
     public double precioxCombo;
     public double totalCombo;
     public String orden;
     public int contador;
     public String[][] datosRegistroCombos;
 
-    public VentasCombos(VentasBoletos ventas, double precioxCombo, double totalCombo) {
+    public Combo(Boleto ventas, double precioxCombo, double totalCombo) {
         this.precioxCombo = precioxCombo;
         this.totalCombo = totalCombo;
     }

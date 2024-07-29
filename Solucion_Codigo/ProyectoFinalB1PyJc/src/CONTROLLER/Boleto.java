@@ -246,10 +246,7 @@ import java.text.DecimalFormat;
         return datosPelicula;
     }
     
-<<<<<<< HEAD:Solucion_Codigo/ProyectoFinalB1PyJc/src/CONTROLLER/Boleto.java
 
-=======
->>>>>>> 400869c998f325abb8d416d41e49c083979b5ca7:Solucion_Codigo/ProyectoFinalB1PyJc/src/CONTROLLER/VentasBoletos.java
     @Override
     public double calcularTotal(){
         double iva = ((nBoletos* precioXboleto)*0.12);
